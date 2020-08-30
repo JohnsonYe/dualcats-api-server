@@ -28,7 +28,7 @@ app.use(fileUpload());
 // });
 // app.use("/build", express.static(path.join(__dirname, "build")))
 
-app.use("/app/v1", routes);
+app.use("/api/v1", routes);
 
 
 app.use((error, req, res, next) => {
