@@ -1,0 +1,11 @@
+* [X] User login passport
+* [X] User oauth
+* [X] set up db on ec2
+* [X] set up db locally
+* [X] create user table
+passport
+passport-local
+express-session
+express-flash
+
+

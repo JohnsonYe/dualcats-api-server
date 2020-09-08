@@ -32,10 +32,14 @@ app.use("/api/v1", routes);
 
 
 app.use((error, req, res, next) => {
+    if ('message' in error) {
+        error = error.message;
+    }
+    console.log(error);
     res.status(error.status || 500).send({
         error: {
             status: error.status || 500,
-            message: error.message || "Internal Server Error",
+            message: error || "Internal Server Error",
         }
     });
 });
