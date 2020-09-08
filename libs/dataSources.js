@@ -1,6 +1,5 @@
 /** dependencies */
-const mysql = require('mysql2');
-const {Client, Pool}  = require('pg');
+const {Pool}  = require('pg');
 const joi = require('joi');
 
 
@@ -8,12 +7,12 @@ const joi = require('joi');
  * Postgresql connection
  */
 const pool = new Pool({
-    "user": '',
-    "host": '127.0.0.1',
-    "database": 'localhost',
-    "password": '',
-    "port": 5432,
-    "max": 20,
+    "user": process.env.AWS_RDS_USER || "",
+    "host": process.env.AWS_RDS_HOST || "127.0.0.1",
+    "database": process.env.AWS_RDS_DATABASE || "localhost",
+    "password": process.env.AWS_RDS_PASSWORD || "",
+    "port": process.env.AWS_RDS_PORT || "5432",
+    "max": Number(process.env.AWS_RDS_MAX_CONNECTION) || 20,
     "connectionTimeoutMillis" : 0,
     "idleTimeoutMillis": 0
 });
