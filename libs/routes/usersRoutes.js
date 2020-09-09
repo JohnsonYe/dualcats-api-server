@@ -20,7 +20,7 @@ router.post("/register", async (req, res, next) => {
         }
         let encryptedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS));
         userManager.create({ email, password: encryptedPassword, username });
-        res.send({success: true, message: `User ${email} sign up successfully.`});
+        res.send({success: true, message: `User ${email} sign up successfully.`, username: username});
     } catch (err) {
         next(err);
     }
@@ -39,7 +39,7 @@ router.post("/login", async (req, res, next) => {
         if ( await bcrypt.compare(password, user.password) ) {
             let authorization = new Authorization();
             const token = authorization.generateToken({ email: user.email, name: user.name});
-            res.send({success: true, token: token});
+            res.send({success: true, token: token, username: user.name});
         } else {
             res.status(401).end('Incorrect password.');
         }
