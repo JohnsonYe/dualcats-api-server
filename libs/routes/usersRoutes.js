@@ -3,7 +3,7 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 
 const { DatabaseManager, UserManager, Validator } = require('../dataSources');
-const Authorization = require('../authorizations');
+const Oauth = require('../authorizations');
 
 /**
  * @parameter {email, password, username}
@@ -20,7 +20,11 @@ router.post("/register", async (req, res, next) => {
         }
         let encryptedPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS));
         userManager.create({ email, password: encryptedPassword, username });
-        res.send({success: true, message: `User ${email} sign up successfully.`, username: username});
+        let oauth = new Oauth();
+        const accessToken = oauth.generateAccessToken({ email: email, username: username});
+        const refreshToken = oauth.generateRefreshToken({ email: email });
+        // res.cookie('refresh_token', refreshToken, { maxAge: Number(process.env.JWT_REFRESH_EXPIRATION_TIME) * 1000});
+        res.send({ success: true, message: `User ${email} sign up successfully.`, data: { username: username, token: accessToken, refresh_token: refreshToken} });
     } catch (err) {
         next(err);
     }
@@ -37,19 +41,16 @@ router.post("/login", async (req, res, next) => {
             throw new Error(`User ${email} does not exist.`);
         }
         if ( await bcrypt.compare(password, user.password) ) {
-            let authorization = new Authorization();
-            const token = authorization.generateToken({ email: user.email, name: user.name});
-            res.send({success: true, token: token, username: user.name});
+            let oauth = new Oauth();
+            const accessToken = oauth.generateAccessToken({ email: user.email, username: user.name});
+            const refreshToken = oauth.generateRefreshToken({ email: user.email });
+            res.send({success: true, data: {token: accessToken, refresh_token: refreshToken, username: user.name }});
         } else {
             res.status(401).end('Incorrect password.');
         }
     } catch(err) {
         next(err);
     }
-});
-
-router.post("/logout", (req, res, next) => {
-    /** to do invalud jwt */
 });
 
 module.exports = router
