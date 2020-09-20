@@ -1,11 +1,10 @@
-* [X] User login passport
-* [X] User oauth
-* [X] set up db on ec2
-* [X] set up db locally
-* [X] create user table
-passport
-passport-local
-express-session
-express-flash
-
-
+* [x] User login passport
+* [x] User oauth
+* [x] set up db on ec2
+* [x] set up db locally
+* [x] create user table
+* [x] set up user session
+* [ ] set up docket for tensorflow
+* [ ] build a trainning modle for cats
+* [ ] build a trainning modle for dog
+* [ ] support mulitple image upload
