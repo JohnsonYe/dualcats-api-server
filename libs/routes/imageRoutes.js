@@ -10,7 +10,7 @@ router.get("/loadImages" , async (req, res, next) => {
     try {
         var Objectlist = await bucket.getList();
         let getImageProcess = [], rawData = [];
-        imagesCount = Objectlist.KeyCount ? Objectlist.KeyCount : imageCount;
+        imagesCount = Objectlist.KeyCount ? Objectlist.KeyCount : imagesCount;
         for (var item of Objectlist.Contents) {
             rawData.push({key: _removeFolderName(item.Key, bucket.folderName)});
             getImageProcess.push(await bucket.getObjectByKey(item.Key));
